@@ -229,7 +229,7 @@ pip install -r requirements.txt
 <!-- **Expected output**: Should show "Successfully installed" messages for all packages
 **Time taken**: 2-5 minutes depending on internet speed -->
 
-### 4.3 Verify Installation
+<!-- ### 4.3 Verify Installation
   
 ```powershell
 pip list
@@ -241,7 +241,7 @@ pip list
 
 ## STEP 5: Configure Snowflake Connection (15 minutes)
 
-### 5.1 Create .env.sample File
+### 5.1 Create .env.sample File -->
 
 This file documents what environment variables you need (NO real credentials):
 
@@ -297,7 +297,7 @@ LOG_LEVEL=INFO
 
 **IMPORTANT**: Never commit `.env` file - it contains real credentials! ✅ Already in .gitignore
 
-### 5.3 Verify .env is in .gitignore
+<!-- ### 5.3 Verify .env is in .gitignore
 
 ```powershell
 # This file should already exist from STEP 2
@@ -306,11 +306,11 @@ Get-Content .gitignore | Select-String ".env"
 
 **Expected**: Should show `.env` in the output
 
----
+--- -->
 
 ## STEP 6: Create Project Directory Structure (10 minutes)
 
-### 6.1 Create All Directories
+<!-- ### 6.1 Create All Directories
 
 ```powershell
 # Create directories
@@ -323,9 +323,9 @@ New-Item -ItemType Directory -Path templates -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Path static/js -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Path static/css -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Path tests -ErrorAction SilentlyContinue
-```
+``` -->
 
-### 6.2 Create __init__.py Files
+<!-- ### 6.2 Create __init__.py Files
 
 These files mark directories as Python packages:
 
@@ -343,20 +343,20 @@ These files mark directories as Python packages:
 "@ | Out-File -Encoding UTF8 backend/__init__.py
 @"
 "@ | Out-File -Encoding UTF8 tests/__init__.py
-```
+``` -->
 
-### 6.3 Verify Structure
+<!-- ### 6.3 Verify Structure
 
 ```powershell
 # View directory tree
 Get-ChildItem -Recurse -Directory | ForEach-Object { Write-Host $_.FullName }
-```
+``` -->
 
 ---
 
 ## STEP 7: Test Snowflake Connection (20 minutes)
 
-### 7.1 Create snowflake_connector/connector.py
+<!-- ### 7.1 Create snowflake_connector/connector.py
 
 ```python
 # File: snowflake_connector/connector.py
@@ -468,9 +468,9 @@ if __name__ == "__main__":
         connector.disconnect()
 ```
 
-Save this file in `snowflake_connector/connector.py`
+Save this file in `snowflake_connector/connector.py` -->
 
-### 7.2 Test the Connection
+<!-- ### 7.2 Test the Connection
 
 ```powershell
 # Make sure virtual environment is activated
@@ -483,13 +483,13 @@ python snowflake_connector/connector.py
 **Troubleshooting**:
 - **Error: "No module named snowflake"** → Run `pip install -r requirements.txt` again
 - **Error: "Authentication failed"** → Check credentials in .env file
-- **Error: "Account identifier invalid"** → Verify SNOW_ACCOUNT format (e.g., xy12345.us-east-1)
+- **Error: "Account identifier invalid"** → Verify SNOW_ACCOUNT format (e.g., xy12345.us-east-1) -->
 
 ---
 
 ## STEP 8: Create First Unit Test (15 minutes)
 
-### 8.1 Create pytest.ini
+<!-- ### 8.1 Create pytest.ini
 
 ```powershell
 @"
@@ -500,9 +500,9 @@ python_classes = Test*
 python_functions = test_*
 addopts = -v --tb=short --strict-markers
 "@ | Out-File -Encoding UTF8 pytest.ini
-```
+``` -->
 
-### 8.2 Create tests/test_snowflake.py
+<!-- ### 8.2 Create tests/test_snowflake.py
 
 ```python
 # File: tests/test_snowflake.py
@@ -547,10 +547,10 @@ if __name__ == "__main__":
 pytest tests/test_snowflake.py -v
 ```
 
-**Expected output**: Tests pass (assuming Snowflake credentials are correct)
+**Expected output**: Tests pass (assuming Snowflake credentials are correct) -->
 
 ---
-
+<!-- 
 ## STEP 9: Commit Initial Setup to Git (5 minutes)
 
 ```powershell
@@ -624,7 +624,7 @@ Create a `DEVELOPMENT.md` file to track your progress:
 - [ ] API documentation
 - [ ] Final commit and review
 "@ | Out-File -Encoding UTF8 DEVELOPMENT.md
-```
+``` -->
 
 ---
 
@@ -666,7 +666,7 @@ poc-trial-2/
 
 ## STEP 12: Verify Everything (5 minutes)
 
-Run this checklist to confirm everything is set up:
+<!-- Run this checklist to confirm everything is set up:
 
 ```powershell
 # 1. Check virtual environment is active (should show (venv) prompt)
@@ -690,7 +690,7 @@ if ($all_exist -contains $False) { Write-Host "❌ Some directories missing" } e
 # 5. Run test
 Write-Host "`nRunning test..."
 pytest tests/test_snowflake.py::TestSnowflakeConnection::test_env_variables_loaded -v
-```
+``` -->
 
 ---
 
