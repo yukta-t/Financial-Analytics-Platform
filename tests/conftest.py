@@ -1,7 +1,47 @@
 """Shared test fixtures for quality check tests"""
+import os
+import sys
 import pytest
 import pandas as pd
 from datetime import datetime, timedelta
+
+# backend/app.py uses flat (non-package) imports internally (e.g. `from auth
+# import ...`), so `backend/` must be on sys.path for it to import cleanly.
+# `backend` is inserted ahead of the project root so `import app` resolves to
+# backend/app.py rather than the empty root-level app.py.
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_BACKEND_DIR = os.path.join(_PROJECT_ROOT, "backend")
+
+if _BACKEND_DIR not in sys.path:
+    sys.path.insert(0, _BACKEND_DIR)
+if _PROJECT_ROOT not in sys.path:
+    sys.path.insert(1, _PROJECT_ROOT)
+
+from app import app as _flask_app  # noqa: E402  (backend/app.py's Flask instance)
+
+
+@pytest.fixture
+def app():
+    """The Flask app under test, configured for testing with an active app context."""
+    _flask_app.config.update(TESTING=True)
+    with _flask_app.app_context():
+        yield _flask_app
+
+
+@pytest.fixture
+def client(app):
+    """Flask test client bound to the `app` fixture."""
+    return app.test_client()
+
+
+@pytest.fixture
+def auth_token(client):
+    """A valid JWT access token obtained via /api/login."""
+    response = client.post(
+        "/api/login",
+        json={"username": "admin", "password": "admin123"},
+    )
+    return response.get_json()["access_token"]
 
 
 @pytest.fixture
