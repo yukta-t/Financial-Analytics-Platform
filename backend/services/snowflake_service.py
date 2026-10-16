@@ -1,31 +1,49 @@
-import pandas as pd
+from dotenv import load_dotenv
+
+from snowflake_connector.connector import (
+    SnowflakeConnector
+)
+
+load_dotenv()
 
 
 def load_table(datatype):
 
-    if datatype == "stock":
+    table_mapping = {
 
-        return pd.DataFrame({
-            "ticker": ["AAPL", "AAPL"],
-            "date": ["2025-01-01", "2025-01-02"],
-            "close": [100, 110],
-            "volume": [1000, 1200]
-        })
+        "stock": "FINANCIAL_DB.PUBLIC.STOCK",
+        "bonds": "FINANCIAL_DB.PUBLIC.BONDS",
+        "security_master": "FINANCIAL_DB.PUBLIC.SECURITY_MASTER"
 
-    elif datatype == "bonds":
 
-        return pd.DataFrame({
-            "ticker": ["BOND1"],
-            "price": [1000]
-        })
+    }
 
-    elif datatype == "security_master":
+    if datatype not in table_mapping:
 
-        return pd.DataFrame({
-            "ssm_id": ["SSM001"],
-            "price": [100]
-        })
+        raise ValueError(
+            "Invalid datatype"
+        )
 
-    raise ValueError(
-        "Invalid datatype"
-    )
+    connector = SnowflakeConnector()
+
+    try:
+
+        connector.connect()
+
+        df = connector.fetch_table(
+            table_mapping[datatype]
+        )
+
+        # normalize columns
+        df.columns = (
+            df.columns
+            .str.strip()
+            .str.lower()
+            .str.replace(" ", "_")
+        )
+
+        return df
+
+    finally:
+
+        connector.disconnect()

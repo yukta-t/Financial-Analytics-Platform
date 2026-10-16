@@ -28,6 +28,19 @@ class SnowflakeConnector:
                 database=os.getenv('SNOW_DATABASE'),
                 schema=os.getenv('SNOW_SCHEMA')
             )
+
+            cursor = self.connection.cursor()
+
+            cursor.execute("""
+            SELECT
+            CURRENT_DATABASE(),
+            CURRENT_SCHEMA(),
+            CURRENT_ROLE()
+            """)
+
+            print("SNOWFLAKE CONTEXT:", cursor.fetchall())
+
+
             logger.info("Successfully connected to Snowflake")
             return self.connection
         except Exception as e:
@@ -120,8 +133,11 @@ if __name__ == "__main__":
         print("✅ Connection successful!")
         
         # Try fetching a simple query
-        result = connector.execute_query("SELECT CURRENT_DATE()")
-        print(f"Current date from Snowflake: {result}")
+        result = connector.execute_query(
+    "SHOW TABLES"
+)
+
+        print(f"Tables in Snowflake: {result}")
     except Exception as e:
         print(f"❌ Connection failed: {e}")
     finally:

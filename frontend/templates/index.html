@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Analytics Platform</title>
+    <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+
+    <!-- ================= LOGIN ================= -->
+    <div class="login-layout" id="loginBar">
+        <aside class="login-branding" aria-label="Financial Analytics Platform">
+            <div class="brand-lockup">
+                <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+                    <rect x="3" y="17" width="6" height="12" rx="1" fill="#93c5fd"></rect>
+                    <rect x="13" y="10" width="6" height="19" rx="1" fill="#60a5fa"></rect>
+                    <rect x="23" y="3" width="6" height="26" rx="1" fill="#dbeafe"></rect>
+                </svg>
+                <span class="brand-name">Financial Analytics Platform</span>
+            </div>
+
+            <div class="brand-content">
+                <p class="brand-eyebrow">Snowflake data quality and metrics</p>
+                <h1 class="brand-headline">Trusted data.<br>Confident decisions.</h1>
+                <p class="brand-description">
+                    Monitor the health of your financial data and the metrics that matter, all in one place.
+                </p>
+                <ul class="brand-capabilities">
+                    <li><span class="capability-check" aria-hidden="true"></span><span>Data quality validation</span></li>
+                    <li><span class="capability-check" aria-hidden="true"></span><span>Metrics monitoring</span></li>
+                    <li><span class="capability-check" aria-hidden="true"></span><span>Secure access</span></li>
+                </ul>
+            </div>
+
+            <div class="brand-chart" aria-hidden="true">
+                <svg viewBox="0 0 800 260" preserveAspectRatio="none">
+                    <path class="brand-chart-grid" d="M0 176H800 M0 212H800 M0 248H800"></path>
+                    <path class="brand-chart-line" d="M0 245 L92 232 L162 238 L254 210 L340 219 L430 185 L515 198 L604 160 L700 177 L800 135"></path>
+                </svg>
+            </div>
+            <footer class="brand-footer">
+                &copy; 2026 Financial Analytics Platform <span>v1.0</span>
+            </footer>
+        </aside>
+
+        <section class="login-workspace" aria-labelledby="loginHeading">
+            <div class="login-status" aria-label="System status">
+                <div class="status-item">
+                    <span class="status-label">Connection Status</span>
+                    <span class="status-value">
+                        <span class="status-dot"></span>
+                        <span>Disconnected</span>
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Last Refresh</span>
+                    <span class="status-value">--</span>
+                </div>
+            </div>
+            <div class="login-card">
+                <h2 class="login-heading" id="loginHeading">Sign in</h2>
+                <p class="login-description">Enter your credentials to access your workspace.</p>
+
+                <div class="login-form">
+                    <label class="login-field">
+                        <span>Username</span>
+                        <input type="text" id="username" autocomplete="username" value="admin">
+                    </label>
+                    <label class="login-field">
+                        <span>Password</span>
+                        <input type="password" id="password" autocomplete="current-password" value="admin123">
+                    </label>
+                    <button id="loginBtn" class="btn btn-primary">Login</button>
+                </div>
+                <p class="login-note">Use your authorized platform credentials to continue.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= DASHBOARD ================= -->
+    <div class="app-shell" id="appMain" style="display:none;">
+        <aside class="dashboard-sidebar" aria-label="Platform status">
+            <div class="sidebar-brand">
+                <div class="brand-lockup">
+                    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+                        <rect x="3" y="17" width="6" height="12" rx="1" fill="#93c5fd"></rect>
+                        <rect x="13" y="10" width="6" height="19" rx="1" fill="#60a5fa"></rect>
+                        <rect x="23" y="3" width="6" height="26" rx="1" fill="#dbeafe"></rect>
+                    </svg>
+                    <span class="brand-name">Financial Analytics Platform</span>
+                </div>
+                <p class="sidebar-subtitle">Snowflake Data Quality &amp; Metrics Monitoring</p>
+            </div>
+
+            <div class="header-status sidebar-status">
+                <div class="status-item">
+                    <span class="status-label">Connection Status</span>
+                    <span class="status-value" id="connectionStatus">
+                        <span class="status-dot" id="connectionDot"></span>
+                        <span id="connectionText">Disconnected</span>
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Last Refresh</span>
+                    <span class="status-value" id="lastRefreshTime">--</span>
+                </div>
+            </div>
+
+            <div class="sidebar-chart" aria-hidden="true">
+                <svg viewBox="0 0 800 260" preserveAspectRatio="none">
+                    <path class="sidebar-chart-grid" d="M0 176H800 M0 212H800 M0 248H800"></path>
+                    <path class="sidebar-chart-line" d="M0 245 L92 232 L162 238 L254 210 L340 219 L430 185 L515 198 L604 160 L700 177 L800 135"></path>
+                </svg>
+            </div>
+            <footer class="sidebar-footer">&copy; 2026 Financial Analytics Platform <span>v1.0</span></footer>
+        </aside>
+
+        <div class="dashboard-workspace">
+            <header class="app-header">
+                <div class="header-row">
+                    <div class="header-titles">
+                        <h1 class="app-title">Financial Analytics Platform</h1>
+                        <p class="app-subtitle">Snowflake Data Quality &amp; Metrics Monitoring</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ================= MAIN ================= -->
+            <main class="app-main">
+
+                <!-- Metric Selection Section -->
+                <section class="panel">
+                    <h2 class="panel-title">Metric Selection</h2>
+
+                    <div class="control-grid">
+                        <div class="control-field">
+                            <div class="field-label-row">
+                                <label for="datatype">Data Type</label>
+                                <span class="tooltip-host data-type-tooltip-host">
+                                    <button class="info-tooltip" type="button" aria-label="Data type information">i</button>
+                                    <span class="tooltip-popover" role="tooltip">
+                                        <span class="tooltip-prompt">Select a data type to view its definition.</span>
+                                        <span class="data-type-tip" data-type="stock">
+                                            <strong class="tooltip-title">Stock</strong>
+                                            <span class="tooltip-definition">Equity market trading data containing prices, returns, volume, VWAP and dividend information for listed securities.</span>
+                                        </span>
+                                        <span class="data-type-tip" data-type="bonds">
+                                            <strong class="tooltip-title">Bonds</strong>
+                                            <span class="tooltip-definition">Fixed-income securities containing coupon rates, maturity dates, yields and interest-rate sensitivity metrics.</span>
+                                        </span>
+                                        <span class="data-type-tip" data-type="security_master">
+                                            <strong class="tooltip-title">Security Master</strong>
+                                            <span class="tooltip-definition">Reference dataset containing security identifiers, issuer information, sector classification and metadata used across financial systems.</span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </div>
+                            <select id="datatype">
+                                <option value="">-- Select --</option>
+                                <option value="stock">Stock</option>
+                                <option value="bonds">Bonds</option>
+                                <option value="security_master">Security Master</option>
+                            </select>
+                        </div>
+
+                        <div class="control-field">
+                            <div class="field-label-row">
+                                <label for="metric">Metric</label>
+                                <span class="tooltip-host metric-tooltip-host">
+                                    <button class="info-tooltip" type="button" aria-label="Metric information">i</button>
+                                    <span class="tooltip-popover" role="tooltip">
+                                        <span class="tooltip-prompt">Select a metric to view its definition and formula.</span>
+                                        <span class="metric-tip" data-metric="daily_return">
+                                            <strong class="tooltip-title">Daily Return</strong>
+                                            <span class="tooltip-formula">(Close<sub>t</sub> / Close<sub>t-1</sub>) - 1</span>
+                                            <span class="tooltip-definition">Measures percentage change in closing price compared to the previous trading day.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="log_return">
+                                            <strong class="tooltip-title">Log Return</strong>
+                                            <span class="tooltip-formula">ln(Close<sub>t</sub> / Close<sub>t-1</sub>)</span>
+                                            <span class="tooltip-definition">Uses natural logarithms to measure returns and is commonly used in quantitative finance.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="sma">
+                                            <strong class="tooltip-title">Simple Moving Average (SMA)</strong>
+                                            <span class="tooltip-formula">SMA<sub>n</sub> = Average of previous n closing prices</span>
+                                            <span class="tooltip-definition">Smooths short-term fluctuations and highlights longer-term price trends.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="ema">
+                                            <strong class="tooltip-title">Exponential Moving Average (EMA)</strong>
+                                            <span class="tooltip-formula">EMA<sub>t</sub> = α·Close<sub>t</sub> + (1-α)·EMA<sub>t-1</sub></span>
+                                            <span class="tooltip-definition">Gives greater weight to recent prices than a simple moving average.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="volatility">
+                                            <strong class="tooltip-title">Rolling Volatility</strong>
+                                            <span class="tooltip-formula">Standard Deviation(Returns) × √252</span>
+                                            <span class="tooltip-definition">Measures price variability and market risk over a rolling time window.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="vwap">
+                                            <strong class="tooltip-title">VWAP</strong>
+                                            <span class="tooltip-formula">Σ(Price × Volume) / Σ(Volume)</span>
+                                            <span class="tooltip-definition">Volume Weighted Average Price represents the average traded price weighted by volume.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="dividend_yield">
+                                            <strong class="tooltip-title">Dividend Yield</strong>
+                                            <span class="tooltip-formula">Dividend / Close Price</span>
+                                            <span class="tooltip-definition">Measures annual dividend income as a percentage of security price.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="ytm">
+                                            <strong class="tooltip-title">Yield To Maturity (YTM)</strong>
+                                            <span class="tooltip-formula">Price = Σ(Coupon/(1+y)<sup>t</sup>) + FaceValue/(1+y)<sup>N</sup></span>
+                                            <span class="tooltip-definition">The annualized return expected if the bond is held until maturity.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="duration">
+                                            <strong class="tooltip-title">Duration</strong>
+                                            <span class="tooltip-formula">Duration = (1/Price) × Σ[t × CF<sub>t</sub>/(1+y)<sup>t</sup>]</span>
+                                            <span class="tooltip-definition">Measures the weighted-average time required to receive a bond's cash flows.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="modified_duration">
+                                            <strong class="tooltip-title">Modified Duration</strong>
+                                            <span class="tooltip-formula">Modified Duration = Macaulay Duration / (1+y)</span>
+                                            <span class="tooltip-definition">Measures bond price sensitivity to interest-rate movements.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="dv01">
+                                            <strong class="tooltip-title">DV01</strong>
+                                            <span class="tooltip-formula">−Duration × Price / 10000</span>
+                                            <span class="tooltip-definition">Estimated bond price change for a 1 basis point movement in yield.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="completeness">
+                                            <strong class="tooltip-title">Completeness</strong>
+                                            <span class="tooltip-formula">1 − (Null Count / Total Rows)</span>
+                                            <span class="tooltip-definition">Percentage of populated values across critical reference-data fields.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="identifier_uniqueness">
+                                            <strong class="tooltip-title">Identifier Uniqueness</strong>
+                                            <span class="tooltip-formula">Distinct SSM_ID / Total Records</span>
+                                            <span class="tooltip-definition">Measures uniqueness of security identifiers and detects duplicate records.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="currency_distribution">
+                                            <strong class="tooltip-title">Currency Distribution</strong>
+                                            <span class="tooltip-definition">Distribution of securities by issuance currency.</span>
+                                        </span>
+                                        <span class="metric-tip" data-metric="average_price_by_sector">
+                                            <strong class="tooltip-title">Average Price by Sector</strong>
+                                            <span class="tooltip-formula">Average(Price) by Security Sector</span>
+                                            <span class="tooltip-definition">Average security price grouped by sector classification.</span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </div>
+                            <select id="metric" disabled>
+                                <option value="">-- Select --</option>
+                            </select>
+                        </div>
+
+                        <div class="control-field" id="paramField" style="display:none;">
+                            <label for="windowSize">Window Size</label>
+                            <input type="number" id="windowSize" min="1" max="500" value="20">
+                        </div>
+                    </div>
+
+                    <div class="control-actions">
+                        <button id="executeBtn" class="btn btn-primary" disabled>Execute</button>
+                        <button id="resetBtn" class="btn btn-secondary">Reset</button>
+                    </div>
+                </section>
+
+                <!-- Error / Status Message Area -->
+                <div id="statusMessage" class="status-message" role="status"></div>
+
+                <!-- Chart Area -->
+                <section class="panel" id="chartSection" style="display:none;">
+                    <h2 class="panel-title">Visualization</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="metricChart"></canvas>
+                    </div>
+                    <div class="chart-empty" id="chartEmpty" style="display:none;">
+                        No visualization available for the selected metric.
+                    </div>
+                </section>
+
+                <!-- Result Table -->
+                <section class="panel" id="tableSection" style="display:none;">
+                    <div class="panel-header-row">
+                        <h2 class="panel-title">Results</h2>
+                        <div class="table-toolbar">
+                            <span id="recordCount" class="record-count">0 records</span>
+                            <button id="exportCsvBtn" class="btn btn-secondary">Export CSV</button>
+                        </div>
+                    </div>
+                    <div class="table-scroll">
+                        <table id="resultsTable">
+                            <thead>
+                                <tr id="tableHead"></tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -90,7 +90,7 @@ def get_currency_distribution(df):
 def get_average_price_by_sector(df):
 
     result = (
-        df.groupby("sector")["price"]
+        df.groupby("security_sector")["price"]
         .mean()
         .reset_index()
     )
