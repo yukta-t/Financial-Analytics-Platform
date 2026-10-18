@@ -3,6 +3,7 @@
    ============================================================ */
 
 const API_BASE = '';
+let messageTimeout;
 
 const state = {
     token: null,
@@ -21,17 +22,61 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('executeBtn').addEventListener('click', handleExecute);
     document.getElementById('resetBtn').addEventListener('click', handleReset);
     document.getElementById('exportCsvBtn').addEventListener('click', handleExportCsv);
+
+    // Read-only metric info panel; runs after the existing handlers' synchronous work.
+    document.getElementById('metric').addEventListener('change', updateMetricInfo);
+    document.getElementById('datatype').addEventListener('change', updateMetricInfo);
+    document.getElementById('resetBtn').addEventListener('click', updateMetricInfo);
 });
+
+/* ================= METRIC INFORMATION (READ-ONLY) ================= */
+
+function updateMetricInfo() {
+    const section = document.getElementById('metricInfoSection');
+    const metricId = document.getElementById('metric').value;
+    const tip = metricId
+        ? Array.from(document.querySelectorAll('.metric-tip')).find(el => el.dataset.metric === metricId)
+        : null;
+
+    if (!tip) {
+        section.style.display = 'none';
+        return;
+    }
+
+    const title = tip.querySelector('.tooltip-title');
+    const formula = tip.querySelector('.tooltip-formula');
+    const definition = tip.querySelector('.tooltip-definition');
+
+    document.getElementById('metricInfoName').textContent = title ? title.textContent : '';
+
+    const formulaTarget = document.getElementById('metricInfoFormula');
+    formulaTarget.replaceChildren(...(formula ? Array.from(formula.childNodes, node => node.cloneNode(true)) : []));
+    document.getElementById('metricInfoFormulaRow').style.display = formula ? '' : 'none';
+
+    document.getElementById('metricInfoDefinition').textContent = definition ? definition.textContent : '';
+    document.getElementById('metricInfoInterpretation').textContent = tip.dataset.interpretation || '';
+
+    section.style.display = 'block';
+}
 
 /* ================= STATUS / MESSAGE HELPERS ================= */
 
 function showMessage(text, type) {
     const el = document.getElementById('statusMessage');
+    clearTimeout(messageTimeout);
     el.textContent = text;
     el.className = 'status-message visible ' + (type || 'info');
+    if (type === 'success') {
+        messageTimeout = setTimeout(() => {
+            el.classList.add('fading-out');
+            messageTimeout = setTimeout(clearMessage, 400);
+        }, 3000);
+    }
 }
 
 function clearMessage() {
+    clearTimeout(messageTimeout);
+    messageTimeout = null;
     const el = document.getElementById('statusMessage');
     el.textContent = '';
     el.className = 'status-message';
@@ -398,6 +443,13 @@ function renderChart(chart) {
     const canvas = document.getElementById('metricChart');
 
     chartSection.style.display = 'block';
+    const selectedDatatype = document.getElementById('datatype').selectedOptions[0];
+    chartSection.querySelector('[data-context-dataset]').textContent =
+        selectedDatatype ? selectedDatatype.textContent : '—';
+    chartSection.querySelector('[data-context-metric]').textContent =
+        state.currentMetric ? state.currentMetric.name : '—';
+    chartSection.querySelector('[data-context-records]').textContent =
+        state.lastResult && state.lastResult.rows ? state.lastResult.rows.length : '—';
 
     if (state.chartInstance) {
         state.chartInstance.destroy();

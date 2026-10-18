@@ -107,11 +107,47 @@
                 </div>
             </div>
 
-            <div class="sidebar-chart" aria-hidden="true">
-                <svg viewBox="0 0 800 260" preserveAspectRatio="none">
-                    <path class="sidebar-chart-grid" d="M0 176H800 M0 212H800 M0 248H800"></path>
-                    <path class="sidebar-chart-line" d="M0 245 L92 232 L162 238 L254 210 L340 219 L430 185 L515 198 L604 160 L700 177 L800 135"></path>
-                </svg>
+            <div class="sidebar-info">
+                <section class="sidebar-info-section" aria-labelledby="sidebarDatasetsTitle">
+                    <h2 class="sidebar-info-title" id="sidebarDatasetsTitle">Datasets</h2>
+                    <ul class="sidebar-info-list">
+                        <li>Stocks</li>
+                        <li>Bonds</li>
+                        <li>Security Master</li>
+                    </ul>
+                </section>
+
+                <section class="sidebar-info-section" aria-labelledby="sidebarMetricsTitle">
+                    <h2 class="sidebar-info-title" id="sidebarMetricsTitle">Metrics</h2>
+                    <ul class="sidebar-info-list sidebar-metric-counts">
+                        <li><span>Stock Metrics</span><strong>7</strong></li>
+                        <li><span>Bond Metrics</span><strong>4</strong></li>
+                        <li><span>Security Master Metrics</span><strong>4</strong></li>
+                    </ul>
+                </section>
+
+                <section class="sidebar-info-section" aria-labelledby="sidebarPlatformTitle">
+                    <h2 class="sidebar-info-title" id="sidebarPlatformTitle">Status</h2>
+                    <ul class="sidebar-info-list sidebar-platform-status">
+                        <li>JWT Protected</li>
+                        <li>Snowflake Connected</li>
+                        <li>Analytics Enabled</li>
+                    </ul>
+                </section>
+
+                <section class="sidebar-info-section" aria-labelledby="sidebarAnalyticsTitle">
+                    <h2 class="sidebar-info-title" id="sidebarAnalyticsTitle">Analytics</h2>
+                    <ul class="sidebar-info-list sidebar-analytics-list">
+                        <li>Daily Return</li>
+                        <li>Log Return</li>
+                        <li>Moving Averages</li>
+                        <li>Volatility</li>
+                        <li>YTM</li>
+                        <li>Duration</li>
+                        <li>DV01</li>
+                        <li>Data Quality Checks</li>
+                    </ul>
+                </section>
             </div>
             <footer class="sidebar-footer">&copy; 2026 Financial Analytics Platform <span>v1.0</span></footer>
         </aside>
@@ -120,11 +156,44 @@
             <header class="app-header">
                 <div class="header-row">
                     <div class="header-titles">
-                        <h1 class="app-title">Financial Analytics Platform</h1>
-                        <p class="app-subtitle">Snowflake Data Quality &amp; Metrics Monitoring</p>
+                        <h1 class="app-title">Financial Analytics Workspace</h1>
+                        <p class="app-subtitle">Analyze metrics, quality checks and reference data from Snowflake.</p>
+                        <ul class="header-badges" aria-label="Platform status">
+                            <li class="header-badge">Snowflake Connected</li>
+                            <li class="header-badge">JWT Protected</li>
+                        </ul>
                     </div>
                 </div>
             </header>
+
+            <section class="market-ticker" aria-label="Static financial market values">
+                <div class="market-ticker-viewport" tabindex="0" aria-label="Financial market values; focus or hover to pause scrolling">
+                    <div class="market-ticker-track">
+                        <ul class="market-ticker-group">
+                            <li><strong>AAPL</strong> <span>111.00</span> <span class="market-ticker-up">&#9650; +1.82%</span></li>
+                            <li><strong>MSFT</strong> <span>212.00</span> <span class="market-ticker-up">&#9650; +0.94%</span></li>
+                            <li><strong>BOND1</strong> <span>980.00</span> <span class="market-ticker-down">&#9660; -0.15%</span></li>
+                            <li><strong>BOND2</strong> <span>1010.00</span> <span class="market-ticker-up">&#9650; +0.22%</span></li>
+                            <li><strong>USD/INR</strong> <span>83.15</span> <span class="market-ticker-up">&#9650;</span></li>
+                            <li><strong>EUR/USD</strong> <span>1.09</span> <span class="market-ticker-down">&#9660;</span></li>
+                            <li><strong>Security Master Completeness</strong> <span>100%</span></li>
+                            <li><strong>Data Quality Checks</strong> <span>Passed</span></li>
+                            <li><strong>Security Records</strong> <span>99.7% Complete</span></li>
+                        </ul>
+                        <ul class="market-ticker-group" aria-hidden="true">
+                            <li><strong>AAPL</strong> <span>111.00</span> <span class="market-ticker-up">&#9650; +1.82%</span></li>
+                            <li><strong>MSFT</strong> <span>212.00</span> <span class="market-ticker-up">&#9650; +0.94%</span></li>
+                            <li><strong>BOND1</strong> <span>980.00</span> <span class="market-ticker-down">&#9660; -0.15%</span></li>
+                            <li><strong>BOND2</strong> <span>1010.00</span> <span class="market-ticker-up">&#9650; +0.22%</span></li>
+                            <li><strong>USD/INR</strong> <span>83.15</span> <span class="market-ticker-up">&#9650;</span></li>
+                            <li><strong>EUR/USD</strong> <span>1.09</span> <span class="market-ticker-down">&#9660;</span></li>
+                            <li><strong>Security Master Completeness</strong> <span>100%</span></li>
+                            <li><strong>Data Quality Checks</strong> <span>Passed</span></li>
+                            <li><strong>Security Records</strong> <span>99.7% Complete</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
             <!-- ================= MAIN ================= -->
             <main class="app-main">
@@ -171,76 +240,76 @@
                                     <button class="info-tooltip" type="button" aria-label="Metric information">i</button>
                                     <span class="tooltip-popover" role="tooltip">
                                         <span class="tooltip-prompt">Select a metric to view its definition and formula.</span>
-                                        <span class="metric-tip" data-metric="daily_return">
+                                        <span class="metric-tip" data-metric="daily_return" data-interpretation="Positive values indicate the closing price rose versus the prior trading day; negative values indicate a decline.">
                                             <strong class="tooltip-title">Daily Return</strong>
                                             <span class="tooltip-formula">(Close<sub>t</sub> / Close<sub>t-1</sub>) - 1</span>
                                             <span class="tooltip-definition">Measures percentage change in closing price compared to the previous trading day.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="log_return">
+                                        <span class="metric-tip" data-metric="log_return" data-interpretation="Positive values indicate price appreciation and negative values indicate depreciation; log returns can be summed across periods.">
                                             <strong class="tooltip-title">Log Return</strong>
                                             <span class="tooltip-formula">ln(Close<sub>t</sub> / Close<sub>t-1</sub>)</span>
                                             <span class="tooltip-definition">Uses natural logarithms to measure returns and is commonly used in quantitative finance.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="sma">
+                                        <span class="metric-tip" data-metric="sma" data-interpretation="Higher values indicate the security has been trading at elevated prices over the selected window.">
                                             <strong class="tooltip-title">Simple Moving Average (SMA)</strong>
                                             <span class="tooltip-formula">SMA<sub>n</sub> = Average of previous n closing prices</span>
                                             <span class="tooltip-definition">Smooths short-term fluctuations and highlights longer-term price trends.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="ema">
+                                        <span class="metric-tip" data-metric="ema" data-interpretation="Higher values indicate stronger recent prices; the EMA responds faster than the SMA to new price movements.">
                                             <strong class="tooltip-title">Exponential Moving Average (EMA)</strong>
                                             <span class="tooltip-formula">EMA<sub>t</sub> = α·Close<sub>t</sub> + (1-α)·EMA<sub>t-1</sub></span>
                                             <span class="tooltip-definition">Gives greater weight to recent prices than a simple moving average.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="volatility">
+                                        <span class="metric-tip" data-metric="volatility" data-interpretation="Higher values indicate greater price fluctuation and elevated market risk over the selected window.">
                                             <strong class="tooltip-title">Rolling Volatility</strong>
                                             <span class="tooltip-formula">Standard Deviation(Returns) × √252</span>
                                             <span class="tooltip-definition">Measures price variability and market risk over a rolling time window.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="vwap">
+                                        <span class="metric-tip" data-metric="vwap" data-interpretation="Prices trading above VWAP suggest buying strength; prices below VWAP suggest selling pressure.">
                                             <strong class="tooltip-title">VWAP</strong>
                                             <span class="tooltip-formula">Σ(Price × Volume) / Σ(Volume)</span>
                                             <span class="tooltip-definition">Volume Weighted Average Price represents the average traded price weighted by volume.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="dividend_yield">
+                                        <span class="metric-tip" data-metric="dividend_yield" data-interpretation="Higher values indicate greater dividend income relative to the security's current price.">
                                             <strong class="tooltip-title">Dividend Yield</strong>
                                             <span class="tooltip-formula">Dividend / Close Price</span>
                                             <span class="tooltip-definition">Measures annual dividend income as a percentage of security price.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="ytm">
+                                        <span class="metric-tip" data-metric="ytm" data-interpretation="Higher values indicate a greater expected return, typically reflecting higher credit or interest-rate risk.">
                                             <strong class="tooltip-title">Yield To Maturity (YTM)</strong>
                                             <span class="tooltip-formula">Price = Σ(Coupon/(1+y)<sup>t</sup>) + FaceValue/(1+y)<sup>N</sup></span>
                                             <span class="tooltip-definition">The annualized return expected if the bond is held until maturity.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="duration">
+                                        <span class="metric-tip" data-metric="duration" data-interpretation="Higher values indicate a longer wait to receive the bond's cash flows and greater interest-rate sensitivity.">
                                             <strong class="tooltip-title">Duration</strong>
                                             <span class="tooltip-formula">Duration = (1/Price) × Σ[t × CF<sub>t</sub>/(1+y)<sup>t</sup>]</span>
                                             <span class="tooltip-definition">Measures the weighted-average time required to receive a bond's cash flows.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="modified_duration">
+                                        <span class="metric-tip" data-metric="modified_duration" data-interpretation="Higher values indicate a larger percentage price change for a given change in yield.">
                                             <strong class="tooltip-title">Modified Duration</strong>
                                             <span class="tooltip-formula">Modified Duration = Macaulay Duration / (1+y)</span>
                                             <span class="tooltip-definition">Measures bond price sensitivity to interest-rate movements.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="dv01">
+                                        <span class="metric-tip" data-metric="dv01" data-interpretation="Larger absolute values indicate greater price sensitivity to a 1 basis point change in yield.">
                                             <strong class="tooltip-title">DV01</strong>
                                             <span class="tooltip-formula">−Duration × Price / 10000</span>
                                             <span class="tooltip-definition">Estimated bond price change for a 1 basis point movement in yield.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="completeness">
+                                        <span class="metric-tip" data-metric="completeness" data-interpretation="Values closer to 100% indicate fewer missing values in critical reference-data fields.">
                                             <strong class="tooltip-title">Completeness</strong>
                                             <span class="tooltip-formula">1 − (Null Count / Total Rows)</span>
                                             <span class="tooltip-definition">Percentage of populated values across critical reference-data fields.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="identifier_uniqueness">
+                                        <span class="metric-tip" data-metric="identifier_uniqueness" data-interpretation="A value of 100% indicates no duplicate identifiers; lower values indicate duplicate records.">
                                             <strong class="tooltip-title">Identifier Uniqueness</strong>
                                             <span class="tooltip-formula">Distinct SSM_ID / Total Records</span>
                                             <span class="tooltip-definition">Measures uniqueness of security identifiers and detects duplicate records.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="currency_distribution">
+                                        <span class="metric-tip" data-metric="currency_distribution" data-interpretation="Larger shares indicate a higher concentration of securities issued in that currency.">
                                             <strong class="tooltip-title">Currency Distribution</strong>
                                             <span class="tooltip-definition">Distribution of securities by issuance currency.</span>
                                         </span>
-                                        <span class="metric-tip" data-metric="average_price_by_sector">
+                                        <span class="metric-tip" data-metric="average_price_by_sector" data-interpretation="Higher values indicate sectors whose securities trade at higher average prices.">
                                             <strong class="tooltip-title">Average Price by Sector</strong>
                                             <span class="tooltip-formula">Average(Price) by Security Sector</span>
                                             <span class="tooltip-definition">Average security price grouped by sector classification.</span>
@@ -271,12 +340,49 @@
                 <!-- Chart Area -->
                 <section class="panel" id="chartSection" style="display:none;">
                     <h2 class="panel-title">Visualization</h2>
+                    <dl class="visualization-context" aria-label="Visualization context">
+                        <div>
+                            <dt>Dataset</dt>
+                            <dd data-context-dataset>—</dd>
+                        </div>
+                        <div>
+                            <dt>Metric</dt>
+                            <dd data-context-metric>—</dd>
+                        </div>
+                        <div>
+                            <dt>Records</dt>
+                            <dd data-context-records>—</dd>
+                        </div>
+                    </dl>
                     <div class="chart-wrapper">
                         <canvas id="metricChart"></canvas>
                     </div>
                     <div class="chart-empty" id="chartEmpty" style="display:none;">
                         No visualization available for the selected metric.
                     </div>
+                </section>
+
+                <!-- Metric Information (read-only) -->
+                <section class="panel" id="metricInfoSection" aria-labelledby="metricInfoTitle" style="display:none;">
+                    <h2 class="panel-title" id="metricInfoTitle">Metric Information</h2>
+                    <dl class="metric-info-list">
+                        <div class="metric-info-row">
+                            <dt>Metric</dt>
+                            <dd id="metricInfoName"></dd>
+                        </div>
+                        <div class="metric-info-row" id="metricInfoFormulaRow">
+                            <dt>Formula</dt>
+                            <dd class="metric-info-formula" id="metricInfoFormula"></dd>
+                        </div>
+                        <div class="metric-info-row">
+                            <dt>Definition</dt>
+                            <dd id="metricInfoDefinition"></dd>
+                        </div>
+                        <div class="metric-info-row">
+                            <dt>Interpretation</dt>
+                            <dd id="metricInfoInterpretation"></dd>
+                        </div>
+                    </dl>
                 </section>
 
                 <!-- Result Table -->
