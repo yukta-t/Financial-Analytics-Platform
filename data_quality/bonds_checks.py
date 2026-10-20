@@ -71,7 +71,19 @@ def check_unique_trades(df):
 
 
 def validate_prev_close_consistency(df):          # The prev_close value stored for today should closely match yesterday's actual close price.
-  
+    """Skip as NOT APPLICABLE when the required price history is unavailable."""
+    missing_columns = [
+        column
+        for column in ("ticker", "date", "close", "prev_close")
+        if column not in df.columns
+    ]
+    if missing_columns:
+        return quality_result(
+            "Prev Close Consistency "
+            f"(NOT APPLICABLE: missing {', '.join(missing_columns)})",
+            df.iloc[:0]
+        )
+
     temp = df.copy()
 
     temp = temp.sort_values(    # sorts in chronological order 

@@ -21,15 +21,16 @@
             </div>
 
             <div class="brand-content">
-                <p class="brand-eyebrow">Snowflake data quality and metrics</p>
+                <p class="brand-eyebrow">Snowflake-powered financial analytics</p>
                 <h1 class="brand-headline">Trusted data.<br>Confident decisions.</h1>
                 <p class="brand-description">
-                    Monitor the health of your financial data and the metrics that matter, all in one place.
+                    Analyze financial metrics, validate data quality, and simulate portfolio risk across Stock, Bond, and Security Master datasets.
                 </p>
                 <ul class="brand-capabilities">
-                    <li><span class="capability-check" aria-hidden="true"></span><span>Data quality validation</span></li>
-                    <li><span class="capability-check" aria-hidden="true"></span><span>Metrics monitoring</span></li>
-                    <li><span class="capability-check" aria-hidden="true"></span><span>Secure access</span></li>
+                    <li><span class="capability-check" aria-hidden="true"></span><span>Financial metrics and visualization</span></li>
+                    <li><span class="capability-check" aria-hidden="true"></span><span>Automated data quality validation</span></li>
+                    <li><span class="capability-check" aria-hidden="true"></span><span>Portfolio risk simulation</span></li>
+                    <li><span class="capability-check" aria-hidden="true"></span><span>Secure Snowflake-backed analytics</span></li>
                 </ul>
             </div>
 
@@ -47,10 +48,10 @@
         <section class="login-workspace" aria-labelledby="loginHeading">
             <div class="login-status" aria-label="System status">
                 <div class="status-item">
-                    <span class="status-label">Connection Status</span>
+                    <span class="status-label">Access Status</span>
                     <span class="status-value">
                         <span class="status-dot"></span>
-                        <span>Disconnected</span>
+                        <span>Not authenticated</span>
                     </span>
                 </div>
                 <div class="status-item">
@@ -60,20 +61,20 @@
             </div>
             <div class="login-card">
                 <h2 class="login-heading" id="loginHeading">Sign in</h2>
-                <p class="login-description">Enter your credentials to access your workspace.</p>
+                <p class="login-description">Sign in to access metrics, data-quality checks, and portfolio analysis.</p>
 
                 <div class="login-form">
                     <label class="login-field">
                         <span>Username</span>
-                        <input type="text" id="username" autocomplete="username" value="admin">
+                        <input type="text" id="username" autocomplete="username" placeholder="Enter username">
                     </label>
                     <label class="login-field">
                         <span>Password</span>
-                        <input type="password" id="password" autocomplete="current-password" value="admin123">
+                        <input type="password" id="password" autocomplete="current-password" placeholder="Enter password">
                     </label>
                     <button id="loginBtn" class="btn btn-primary">Login</button>
                 </div>
-                <p class="login-note">Use your authorized platform credentials to continue.</p>
+                <p class="login-note">Authorized access only. Authentication is protected using JWT.</p>
             </div>
         </section>
     </div>
@@ -95,10 +96,10 @@
 
             <div class="header-status sidebar-status">
                 <div class="status-item">
-                    <span class="status-label">Connection Status</span>
+                    <span class="status-label">Access Status</span>
                     <span class="status-value" id="connectionStatus">
                         <span class="status-dot" id="connectionDot"></span>
-                        <span id="connectionText">Disconnected</span>
+                        <span id="connectionText">Not authenticated</span>
                     </span>
                 </div>
                 <div class="status-item">
@@ -106,6 +107,19 @@
                     <span class="status-value" id="lastRefreshTime">--</span>
                 </div>
             </div>
+
+            <div class="sidebar-content" tabindex="0" role="region" aria-label="Platform navigation and information">
+            <nav class="sidebar-navigation" aria-label="Dashboard pages">
+                <button id="metricsNavBtn" class="sidebar-nav-link" type="button" aria-current="page">
+                    Metrics Dashboard
+                </button>
+                <button id="qualityNavBtn" class="sidebar-nav-link" type="button">
+                    Data Quality Center
+                </button>
+                <button id="portfolioNavBtn" class="sidebar-nav-link" type="button">
+                    Portfolio Risk Simulator
+                </button>
+            </nav>
 
             <div class="sidebar-info">
                 <section class="sidebar-info-section" aria-labelledby="sidebarDatasetsTitle">
@@ -148,6 +162,7 @@
                         <li>Data Quality Checks</li>
                     </ul>
                 </section>
+            </div>
             </div>
             <footer class="sidebar-footer">&copy; 2026 Financial Analytics Platform <span>v1.0</span></footer>
         </aside>
@@ -196,7 +211,7 @@
             </section>
 
             <!-- ================= MAIN ================= -->
-            <main class="app-main">
+            <main class="app-main dashboard-page" id="metricsPage">
 
                 <!-- Metric Selection Section -->
                 <section class="panel">
@@ -338,6 +353,14 @@
                 <div id="statusMessage" class="status-message" role="status"></div>
 
                 <!-- Chart Area -->
+                <section class="panel metric-initial-panel metric-initial-visualization" id="visualizationInitialState" aria-labelledby="visualizationInitialTitle">
+                    <h2 class="panel-title" id="visualizationInitialTitle">Visualization</h2>
+                    <div class="metric-initial-content">
+                        <h3>No visualization generated yet</h3>
+                        <p>Select a dataset and metric, then click Execute to generate a visualization from Snowflake data.</p>
+                    </div>
+                </section>
+
                 <section class="panel" id="chartSection" style="display:none;">
                     <h2 class="panel-title">Visualization</h2>
                     <dl class="visualization-context" aria-label="Visualization context">
@@ -386,6 +409,14 @@
                 </section>
 
                 <!-- Result Table -->
+                <section class="panel metric-initial-panel metric-initial-results" id="resultsInitialState" aria-labelledby="resultsInitialTitle">
+                    <h2 class="panel-title" id="resultsInitialTitle">Results</h2>
+                    <div class="metric-initial-content">
+                        <h3>No results available yet</h3>
+                        <p>Calculated records will appear here after the selected metric has been executed.</p>
+                    </div>
+                </section>
+
                 <section class="panel" id="tableSection" style="display:none;">
                     <div class="panel-header-row">
                         <h2 class="panel-title">Results</h2>
@@ -402,6 +433,188 @@
                             <tbody id="tableBody"></tbody>
                         </table>
                     </div>
+                </section>
+            </main>
+
+            <main class="app-main dashboard-page quality-page" id="qualityPage" style="display:none;" aria-labelledby="qualityPageTitle">
+                <header class="quality-page-heading">
+                    <h1 id="qualityPageTitle">Data Quality Center</h1>
+                    <p>Run the existing quality checks against a Snowflake dataset and inspect any offending rows.</p>
+                </header>
+
+                <section class="panel" aria-labelledby="qualityDatasetTitle">
+                    <h2 class="panel-title" id="qualityDatasetTitle">Dataset Selector</h2>
+                    <div class="quality-controls">
+                        <div class="control-field">
+                            <label for="qualityDatatype">Data Type</label>
+                            <select id="qualityDatatype">
+                                <option value="">-- Select --</option>
+                                <option value="stock">Stock</option>
+                                <option value="bonds">Bonds</option>
+                                <option value="security_master">Security Master</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel quality-run-panel" aria-labelledby="qualityRunTitle">
+                    <div class="panel-header-row">
+                        <h2 class="panel-title" id="qualityRunTitle">Run Checks</h2>
+                        <button id="runQualityChecksBtn" class="btn btn-primary" type="button" disabled>
+                            Run Checks
+                        </button>
+                    </div>
+                    <p class="quality-description">All available checks for the selected dataset will run together.</p>
+                    <div id="qualityStatusMessage" class="quality-status-message" role="status" aria-live="polite"></div>
+                </section>
+
+                <section class="panel quality-results-panel" id="qualityResultsSection" aria-labelledby="qualityResultsTitle" hidden>
+                    <div class="panel-header-row">
+                        <div>
+                            <h2 class="panel-title" id="qualityResultsTitle">Quality Check Results</h2>
+                            <p class="quality-description" id="qualityResultsDescription"></p>
+                        </div>
+                    </div>
+                    <div class="quality-check-list" id="qualityCheckList"></div>
+                </section>
+            </main>
+
+            <main class="app-main dashboard-page portfolio-page" id="portfolioPage" style="display:none;" aria-labelledby="portfolioPageTitle">
+                <header class="quality-page-heading">
+                    <h1 id="portfolioPageTitle">Portfolio Risk Simulator</h1>
+                    <p>Create a portfolio from securities in the Snowflake STOCK dataset and review its estimated return and risk.</p>
+                </header>
+
+                <section class="panel portfolio-overview-card" aria-labelledby="portfolioOverviewTitle">
+                    <div class="portfolio-overview-intro">
+                        <h2 class="panel-title" id="portfolioOverviewTitle">Portfolio Overview</h2>
+                        <p>Build a portfolio using securities from the Snowflake STOCK dataset.</p>
+                    </div>
+                    <dl class="portfolio-overview-details">
+                        <div class="portfolio-overview-detail">
+                            <dt>Expected Return</dt>
+                            <dd>Weighted average return based on selected holdings.</dd>
+                        </div>
+                        <div class="portfolio-overview-detail">
+                            <dt>Volatility</dt>
+                            <dd>Estimated portfolio risk based on price variability.</dd>
+                        </div>
+                        <div class="portfolio-overview-detail">
+                            <dt>Risk Score</dt>
+                            <dd>Low, Medium or High risk classification.</dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <section class="panel portfolio-selection-card" aria-labelledby="portfolioSelectionTitle">
+                    <h2 class="panel-title" id="portfolioSelectionTitle">Security Selection</h2>
+                    <div class="portfolio-controls">
+                        <div class="control-field">
+                            <label for="portfolioSecuritySelect">Security</label>
+                            <select id="portfolioSecuritySelect">
+                                <option value="">-- Select Security --</option>
+                            </select>
+                        </div>
+                        <div class="control-field">
+                            <label for="portfolioWeightInput">Allocation (%)</label>
+                            <input id="portfolioWeightInput" type="number" min="0.01" max="100" step="0.01" placeholder="e.g. 40">
+                        </div>
+                        <button id="addPortfolioHoldingBtn" class="btn btn-secondary" type="button">Add Security</button>
+                    </div>
+                </section>
+
+                <section class="panel" aria-labelledby="portfolioAllocationTitle">
+                    <div class="panel-header-row">
+                        <h2 class="panel-title" id="portfolioAllocationTitle">Allocation Breakdown</h2>
+                        <p class="portfolio-total-allocation">Total Allocation: <strong id="portfolioTotalAllocation">0.00%</strong></p>
+                    </div>
+                    <div id="portfolioAllocationWarning" class="portfolio-allocation-warning" role="alert" hidden>
+                        Portfolio allocations must sum to 100%
+                    </div>
+                    <div class="portfolio-holdings-content">
+                        <div class="portfolio-empty-state" role="status">
+                            <span class="portfolio-empty-state-mark" aria-hidden="true"></span>
+                            <div>
+                                <p class="portfolio-empty-state-title">No portfolio holdings added.</p>
+                                <p>Select securities and assign allocation percentages.</p>
+                                <p>Total allocation must equal 100%.</p>
+                            </div>
+                        </div>
+                        <div class="table-scroll portfolio-holdings-scroll">
+                            <table class="portfolio-holdings-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Security</th>
+                                        <th scope="col">Allocation</th>
+                                        <th scope="col"><span class="visually-hidden">Actions</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="portfolioHoldingsBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="portfolioStatusMessage" class="portfolio-status-message" role="status" aria-live="polite"></div>
+                    <div class="portfolio-run-actions">
+                        <button id="runPortfolioSimulationBtn" class="btn btn-primary" type="button" disabled>Run Simulation</button>
+                    </div>
+                </section>
+
+                <section class="panel portfolio-chart-placeholder" id="portfolioChartPlaceholder" aria-labelledby="portfolioChartPlaceholderTitle">
+                    <h2 class="panel-title" id="portfolioChartPlaceholderTitle">Allocation Pie Chart</h2>
+                    <div class="portfolio-chart-placeholder-content">
+                        <span class="portfolio-chart-placeholder-mark" aria-hidden="true"></span>
+                        <p>Portfolio allocation chart will appear here after simulation.</p>
+                    </div>
+                    <section class="portfolio-interpretation" aria-label="Portfolio Interpretation">
+                        <h3>Portfolio Interpretation</h3>
+                        <span class="portfolio-interpretation-label">Rules-based interpretation</span>
+                        <p data-portfolio-interpretation>Run a simulation to view a rules-based interpretation of the portfolio results.</p>
+                    </section>
+                </section>
+
+                <section class="portfolio-results-grid" id="portfolioResults" aria-label="Portfolio simulation results" hidden>
+                    <article class="panel portfolio-summary-card" aria-labelledby="portfolioSummaryTitle">
+                        <h2 class="panel-title" id="portfolioSummaryTitle">Risk Summary</h2>
+                        <dl class="portfolio-summary-values">
+                            <div>
+                                <dt>Expected Return</dt>
+                                <dd id="portfolioExpectedReturn">--</dd>
+                            </div>
+                            <div>
+                                <dt>Portfolio Volatility</dt>
+                                <dd id="portfolioVolatility">--</dd>
+                            </div>
+                            <div>
+                                <dt>Risk Score</dt>
+                                <dd id="portfolioRiskScore" class="portfolio-risk-badge">--</dd>
+                            </div>
+                        </dl>
+                        <section class="portfolio-interpretation" aria-label="Portfolio Interpretation">
+                            <h3>Portfolio Interpretation</h3>
+                            <span class="portfolio-interpretation-label">Rules-based interpretation</span>
+                            <p data-portfolio-interpretation>Run a simulation to view a rules-based interpretation of the portfolio results.</p>
+                        </section>
+                    </article>
+                    <section class="panel portfolio-chart-panel" aria-labelledby="portfolioChartTitle">
+                        <h2 class="panel-title" id="portfolioChartTitle">Allocation Pie Chart</h2>
+                        <dl class="portfolio-chart-metadata" aria-label="Allocation context">
+                            <div>
+                                <dt>Number of Holdings</dt>
+                                <dd data-portfolio-holdings-count>--</dd>
+                            </div>
+                            <div>
+                                <dt>Largest Position</dt>
+                                <dd data-portfolio-largest-position>--</dd>
+                            </div>
+                            <div>
+                                <dt>Total Allocation</dt>
+                                <dd data-portfolio-total-allocation>--</dd>
+                            </div>
+                        </dl>
+                        <div class="portfolio-chart-wrapper">
+                            <canvas id="portfolioAllocationChart" aria-label="Portfolio allocation pie chart" role="img"></canvas>
+                        </div>
+                    </section>
                 </section>
             </main>
         </div>

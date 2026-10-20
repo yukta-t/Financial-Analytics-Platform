@@ -42,6 +42,18 @@ def check_duplicate_ssm_id(df):
 
 
 def check_duplicate_name_isin(df):
+    """Skip as NOT APPLICABLE when either duplicate-detection key is absent."""
+    missing_columns = [
+        column
+        for column in ("name", "isin")
+        if column not in df.columns
+    ]
+    if missing_columns:
+        return quality_result(
+            "Duplicate Name ISIN Check "
+            f"(NOT APPLICABLE: missing {', '.join(missing_columns)})",
+            df.iloc[:0]
+        )
 
     failed = df[
         df.duplicated(

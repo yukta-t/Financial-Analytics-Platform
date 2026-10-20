@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 from flask import Flask
 from flask_jwt_extended import JWTManager
@@ -37,6 +38,18 @@ from metrics.security_master_metrics import (
 
 
 from backend.services.snowflake_service import load_table
+from backend.services.portfolio_service import (
+    PortfolioInputError,
+    get_available_tickers,
+    simulate_portfolio
+)
+from data_quality.stock_checks import run_all_stock_checks
+from data_quality.bonds_checks import run_all_bond_checks
+from data_quality.security_master_checks import (
+    calculate_completeness as calculate_security_master_completeness,
+    check_identifier_uniqueness,
+    run_all_security_master_checks
+)
 
 from backend.errors import (
     APIError,
@@ -78,6 +91,15 @@ METRICS = {
     {"id":"currency_distribution","name":"Currency Distribution"},
     {"id":"average_price_by_sector","name":"Average Price By Sector"}
 ]
+}
+
+STOCK_TIME_SERIES_METRICS = {
+    "daily_return",
+    "log_return",
+    "sma",
+    "ema",
+    "volatility",
+    "dividend_yield"
 }
 
 
@@ -181,6 +203,126 @@ def metrics():
         "status":"ok",
         "metrics": METRICS[datatype]
     })
+
+
+@app.get("/api/quality")
+@login_required
+def quality():
+
+    datatype = request.args.get("datatype")
+    if datatype not in {
+        "stock",
+        "bonds",
+        "security_master"
+    }:
+        raise BadRequestError("Invalid datatype")
+
+    try:
+        df = load_table(datatype)
+        if df.empty:
+            return jsonify({
+                "status": "error",
+                "message": "No data available for the selected dataset"
+            }), 400
+
+        if datatype == "stock":
+            results = run_all_stock_checks(df)
+            display_names = {
+                "Duplicate Records": "Duplicate Detection"
+            }
+        elif datatype == "bonds":
+            results = run_all_bond_checks(df)
+            display_names = {
+                "Maturity Date Validation": "Maturity Validation",
+                "Bond Numeric Validation": "Numeric Validation",
+                "Bond VWAP Validation": "VWAP Validation",
+                "Duplicate Trade Check": "Unique Trade Validation",
+                "Prev Close Consistency": "Previous Close Consistency"
+            }
+        else:
+            results = run_all_security_master_checks(df)
+            display_names = {
+                "Security Master Numeric Ranges": "Numeric Validation",
+                "Duplicate SSM_ID Check": "Duplicate SSM_ID",
+                "Duplicate Name ISIN Check": "Duplicate Name/ISIN"
+            }
+
+        checks = [
+            {
+                "check_name": display_names.get(
+                    result["check_name"],
+                    result["check_name"]
+                ),
+                "status": result["status"],
+                "offending_count": int(result["offending_count"]),
+                "sample_rows": json.loads(
+                    pd.DataFrame(result["sample_rows"]).to_json(
+                        orient="records",
+                        date_format="iso"
+                    )
+                )
+            }
+            for result in results
+        ]
+
+        if datatype == "security_master":
+            completeness = calculate_security_master_completeness(df)
+            completeness_columns = list(completeness)
+            incomplete_rows = df.loc[
+                df[completeness_columns].isna().any(axis=1)
+            ]
+            checks.append({
+                "check_name": "Completeness",
+                "status": (
+                    "PASS"
+                    if all(value == 100 for value in completeness.values())
+                    else "FAIL"
+                ),
+                "offending_count": int(len(incomplete_rows)),
+                "sample_rows": json.loads(
+                    incomplete_rows.head(5).to_json(
+                        orient="records",
+                        date_format="iso"
+                    )
+                )
+            })
+
+            uniqueness = check_identifier_uniqueness(df)
+            duplicate_identifier_rows = df.loc[
+                df["ssm_id"].isna()
+                | df.duplicated(subset=["ssm_id"], keep=False)
+            ]
+            checks.append({
+                "check_name": uniqueness["metric_name"],
+                "status": (
+                    "PASS"
+                    if uniqueness["uniqueness_percent"] == 100
+                    else "FAIL"
+                ),
+                "offending_count": int(len(duplicate_identifier_rows)),
+                "sample_rows": json.loads(
+                    duplicate_identifier_rows.head(5).to_json(
+                        orient="records",
+                        date_format="iso"
+                    )
+                )
+            })
+
+        logger.info("Quality checks called | datatype=%s", datatype)
+        return jsonify({
+            "status": "ok",
+            "checks": checks
+        })
+    except Exception as error:
+        logger.exception(
+            "Quality checks failed | datatype=%s",
+            datatype
+        )
+        return jsonify({
+            "status": "error",
+            "message": str(error)
+        }), 500
+
 
 @app.post("/api/execute")
 @login_required
@@ -433,20 +575,59 @@ def execute():
 
 
         chart = {}
-        if "date" in result.columns:
-            chart = {
-        "labels": (
-            result["date"]
-            .astype(str)
-            .tolist()
-        ),
+        if (
+            datatype == "stock"
+            and metric_id in STOCK_TIME_SERIES_METRICS
+            and {"date", "ticker", metric_id}.issubset(result.columns)
+        ):
+            chart_data = result.loc[:, ["date", "ticker", metric_id]].dropna(
+                subset=["date", "ticker"]
+            )
+            unique_dates = (
+                chart_data["date"]
+                .drop_duplicates()
+                .sort_values(kind="stable")
+            )
+            labels = [str(date) for date in unique_dates]
+            chart_data = chart_data.sort_values(
+                ["ticker", "date"],
+                kind="stable"
+            )
 
-        "values": (
-            result.iloc[:, -1]
-            .fillna(0)
-            .tolist()
-        )
-    }  
+            datasets = []
+            for ticker, ticker_data in chart_data.groupby("ticker", sort=True):
+                values_by_date = {
+                    str(date): None if pd.isna(value) else float(value)
+                    for date, value in ticker_data[
+                        ["date", metric_id]
+                    ].itertuples(index=False, name=None)
+                }
+                datasets.append({
+                    "label": str(ticker),
+                    "data": [
+                        values_by_date.get(label)
+                        for label in labels
+                    ]
+                })
+
+            chart = {
+                "type": "line",
+                "labels": labels,
+                "datasets": datasets
+            }
+        elif "date" in result.columns:
+            chart = {
+                "labels": (
+                    result["date"]
+                    .astype(str)
+                    .tolist()
+                ),
+                "values": (
+                    result.iloc[:, -1]
+                    .fillna(0)
+                    .tolist()
+                )
+            }
 
             
         return jsonify({
@@ -471,6 +652,53 @@ def execute():
             "message":str(e)
         }), 500
 
+
+
+@app.get("/api/portfolio/securities")
+@login_required
+def portfolio_securities():
+
+    try:
+        tickers = get_available_tickers(load_table("stock"))
+    except Exception as error:
+        logger.exception("Failed to load portfolio securities")
+        return jsonify({
+            "status": "error",
+            "message": str(error)
+        }), 500
+
+    return jsonify({
+        "status": "ok",
+        "securities": tickers
+    })
+
+
+@app.post("/api/portfolio/simulate")
+@login_required
+def portfolio_simulate():
+
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        raise BadRequestError("Request body must be a JSON object")
+
+    try:
+        result = simulate_portfolio(
+            load_table("stock"),
+            payload.get("holdings")
+        )
+    except PortfolioInputError as error:
+        raise BadRequestError(str(error))
+    except Exception as error:
+        logger.exception("Portfolio simulation failed")
+        return jsonify({
+            "status": "error",
+            "message": str(error)
+        }), 500
+
+    return jsonify({
+        "status": "ok",
+        **result
+    })
 
 
 @app.errorhandler(APIError)
@@ -508,9 +736,6 @@ if __name__ == "__main__":
         port=5000,
         debug=True
     )
-
-
-
 
 
 
